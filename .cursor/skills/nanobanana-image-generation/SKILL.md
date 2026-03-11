@@ -7,10 +7,10 @@ description: Use when the user wants to generate or edit images with Google's Na
 
 ## Overview
 
-Use this skill for Gemini image generation and image editing through the official `generateContent` flow. Follow Google's official examples and only replace:
+Use this skill for Gemini image generation and image editing through the official `generateContent` flow. Follow Google's official examples and replace:
 
-- API key with the user's Zhizengzeng key
-- base URL with `https://api.zhizengzeng.com/google`
+- API key with the provider key
+- base URL with the chosen Google-compatible Gemini endpoint
 
 Do not use OpenAI-style `/images/generations` or `/images/edits` routes for this skill.
 
@@ -30,9 +30,15 @@ For requests like "replace the English text in this attached image with Chinese"
 Set environment variables:
 
 ```bash
-export NANOBANANA_API_KEY="your-zhizengzeng-key"
-export NANOBANANA_BASE_URL="https://api.zhizengzeng.com/google"
+export NANOBANANA_API_KEY="your-provider-key"
+export NANOBANANA_BASE_URL="https://your-google-compatible-endpoint.example"
 export NANOBANANA_MODEL="gemini-3.1-flash-image-preview"
+```
+
+Example provider:
+
+```bash
+export NANOBANANA_BASE_URL="https://api.zhizengzeng.com/google"
 ```
 
 If you do not want the API key to appear in the command line, store it in a file and use:
@@ -79,7 +85,7 @@ Required:
 
 Optional:
 - `NANOBANANA_BASE_URL`
-  Default: `https://api.zhizengzeng.com/google`
+  Default example: `https://api.zhizengzeng.com/google`
 - `NANOBANANA_MODEL`
   Default: `gemini-3.1-flash-image-preview`
 - `NANOBANANA_TIMEOUT`
@@ -116,7 +122,11 @@ Official Google examples:
 - `api_key="GEMINI_API_KEY"`
 - `base_url="https://generativelanguage.googleapis.com"`
 
-Zhizengzeng replacements:
+Third-party provider replacements:
+- `api_key="your_provider_api_key"`
+- `base_url="your_google_compatible_endpoint"`
+
+Zhizengzeng example:
 - `api_key="your_zzz_api_key"`
 - `base_url="https://api.zhizengzeng.com/google"`
 

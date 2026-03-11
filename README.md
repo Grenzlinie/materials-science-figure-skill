@@ -1,6 +1,6 @@
 # MatFig Nanobanana Skill
 
-Portable AI-agent skill for materials-science figure generation and image editing with Nanobanana / Gemini image models through Zhizengzeng's Google-compatible endpoint.
+Portable AI-agent skill for materials-science figure generation and image editing with Nanobanana / Gemini image models through any Google-compatible Gemini endpoint.
 
 This repository is packaged as a skill distribution repo, not just a script repo. It includes ready-to-drop skill folders for multiple agent ecosystems so other agents can integrate it with minimal setup.
 
@@ -32,8 +32,8 @@ Both English and Simplified Chinese figure text are supported.
 Put these in `~/.zshrc`:
 
 ```bash
-export NANOBANANA_API_KEY="your_zzz_api_key"
-export NANOBANANA_BASE_URL="https://api.zhizengzeng.com/google"
+export NANOBANANA_API_KEY="your_provider_api_key"
+export NANOBANANA_BASE_URL="https://your-google-compatible-endpoint.example"
 export NANOBANANA_MODEL="gemini-3.1-flash-image-preview"
 ```
 
@@ -44,6 +44,12 @@ source ~/.zshrc
 ```
 
 Optional: if you do not want the key stored directly in `~/.zshrc`, the bundled scripts also support `NANOBANANA_API_KEY_FILE` and `--api-key-file`.
+
+Provider note:
+
+- Any third-party endpoint that is compatible with the Gemini `generateContent` API shape should work.
+- Zhizengzeng is one supported example:
+  - `NANOBANANA_BASE_URL="https://api.zhizengzeng.com/google"`
 
 ## Supported Agent Layouts
 
@@ -205,6 +211,7 @@ python3 skills/nanobanana-image-generation/scripts/generate_image.py \
 
 ## Notes
 
-- The skill follows the official Gemini `generateContent` request shape and only swaps in Zhizengzeng's base URL and API key.
+- The skill follows the official Gemini `generateContent` request shape and works with third-party Google-compatible Gemini endpoints.
+- Zhizengzeng is one example provider, not a hard requirement.
 - For attachment-only chat images, exact pixel-preserving editing may still require access to a real file path.
 - Generated figures are best treated as first-pass publication visuals; exact scientific typography and quantitative plots should still be reviewed by a human.

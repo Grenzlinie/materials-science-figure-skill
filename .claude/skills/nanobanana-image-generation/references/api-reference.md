@@ -2,12 +2,17 @@
 
 ## Official Contract
 
-Use the official Gemini `generateContent` API shape and only replace:
+Use the official Gemini `generateContent` API shape and replace the provider-specific values:
 
 - Official base URL: `https://generativelanguage.googleapis.com`
-- Zhizengzeng base URL: `https://api.zhizengzeng.com/google`
+- Third-party base URL: your Google-compatible Gemini endpoint
 
 - Official API key: `GEMINI_API_KEY`
+- Third-party API key: the provider key
+
+Example provider:
+
+- Zhizengzeng base URL: `https://api.zhizengzeng.com/google`
 - Zhizengzeng API key: the user's ZZZ key
 
 ## Route

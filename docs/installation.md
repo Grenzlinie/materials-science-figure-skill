@@ -69,8 +69,8 @@ Project-local:
 Recommended in `~/.zshrc`:
 
 ```bash
-export NANOBANANA_API_KEY="your_zzz_api_key"
-export NANOBANANA_BASE_URL="https://api.zhizengzeng.com/google"
+export NANOBANANA_API_KEY="your_provider_api_key"
+export NANOBANANA_BASE_URL="https://your-google-compatible-endpoint.example"
 export NANOBANANA_MODEL="gemini-3.1-flash-image-preview"
 ```
 
@@ -84,6 +84,12 @@ Optional alternative:
 
 - `NANOBANANA_API_KEY_FILE`
 - `--api-key-file`
+
+Provider note:
+
+- Any third-party endpoint compatible with Gemini `generateContent` should work.
+- Zhizengzeng is one example:
+  - `https://api.zhizengzeng.com/google`
 
 ## Canonical Source
 
