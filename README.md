@@ -1,4 +1,4 @@
-# Nanobanana Materials Figure Skill
+# Materials Science Figure Skill
 
 Portable AI-agent skill for materials-science figure generation and image editing with Nanobanana / Gemini image models through any Google-compatible Gemini endpoint.
 
@@ -152,7 +152,7 @@ More explicit platform notes are in [docs/installation.md](docs/installation.md)
 ## Repository Layout
 
 ```text
-nanobanana-materials-figure-skill/
+materials-science-figure-skill/
 ├── README.md
 ├── skill.sh
 ├── .gitignore
