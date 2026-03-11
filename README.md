@@ -5,6 +5,10 @@ Portable AI-agent skill for materials-science figure generation and image editin
 This repository is packaged as a skill distribution repo, not just a script repo. It includes ready-to-drop skill folders for multiple agent ecosystems so other agents can integrate it with minimal setup.
 
 ## One-Command Install
+(Recommened) Use skill.sh CLI and select which coding agent you want to install the skill.
+```bash
+npx skills add https://github.com/Grenzlinie/materials-science-figure-skill --skill nanobanana-image-generation
+```
 
 Use the bundled installer:
 
