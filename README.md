@@ -4,6 +4,45 @@ Portable AI-agent skill for materials-science figure generation and image editin
 
 This repository is packaged as a skill distribution repo, not just a script repo. It includes ready-to-drop skill folders for multiple agent ecosystems so other agents can integrate it with minimal setup.
 
+## One-Command Install
+
+Use the bundled installer:
+
+```bash
+chmod +x skill.sh
+./skill.sh codex
+```
+
+Other supported targets:
+
+```bash
+./skill.sh claude
+./skill.sh cursor
+./skill.sh gemini
+./skill.sh opencode
+```
+
+Global install example:
+
+```bash
+./skill.sh codex --global
+```
+
+## Claude Quick Add
+
+For Claude-style project-local setup:
+
+```bash
+./skill.sh claude
+```
+
+Manual equivalent:
+
+```bash
+mkdir -p .claude/skills
+cp -R skills/nanobanana-image-generation .claude/skills/nanobanana-image-generation
+```
+
 ## What This Skill Is For
 
 Use this skill when an AI agent needs to:
@@ -115,6 +154,7 @@ More explicit platform notes are in [docs/installation.md](docs/installation.md)
 ```text
 matfig-nanobanana-skill/
 ├── README.md
+├── skill.sh
 ├── .gitignore
 ├── docs/
 │   ├── installation.md
