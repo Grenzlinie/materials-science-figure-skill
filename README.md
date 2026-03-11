@@ -49,10 +49,8 @@ Optional: if you do not want the key stored directly in `~/.zshrc`, the bundled 
 
 This repo already ships the skill in several common locations:
 
-- `skill/`
-  Canonical source folder in this repository.
 - `skills/nanobanana-image-generation/`
-  Generic skill folder for manual copying.
+  Canonical source folder in this repository.
 - `.codex/skills/nanobanana-image-generation/`
   Codex-style project-local discovery.
 - `.claude/skills/nanobanana-image-generation/`
@@ -116,9 +114,8 @@ matfig-nanobanana-skill/
 │   ├── installation.md
 │   └── cases/
 │       └── metal-heat-treatment-1.png
-├── skill/                                   # canonical source
 ├── skills/
-│   └── nanobanana-image-generation/         # generic drop-in skill
+│   └── nanobanana-image-generation/         # canonical source
 ├── .codex/skills/
 ├── .claude/skills/
 ├── .cursor/skills/
@@ -154,14 +151,14 @@ The repo is primarily packaged as a skill, but direct script invocation is inclu
 ### Basic example
 
 ```bash
-python3 skill/scripts/generate_image.py \
+python3 skills/nanobanana-image-generation/scripts/generate_image.py \
   "Create a clean scientific illustration of a catalyst nanoparticle on an oxide support."
 ```
 
 ### Materials figure shortcut
 
 ```bash
-python3 skill/scripts/generate_image.py \
+python3 skills/nanobanana-image-generation/scripts/generate_image.py \
   "Steel heat treatment covering annealing, quenching, tempering, and the resulting microstructure-property evolution." \
   --materials-figure processing-workflow \
   --lang en \
@@ -173,7 +170,7 @@ python3 skill/scripts/generate_image.py \
 ### Image editing
 
 ```bash
-python3 skill/scripts/generate_image.py \
+python3 skills/nanobanana-image-generation/scripts/generate_image.py \
   "Using the provided image, change only the blue sofa to a vintage brown leather Chesterfield sofa. Keep everything else exactly the same." \
   --input-image ./living-room.png
 ```
@@ -197,7 +194,7 @@ The following image was generated with the built-in `processing-workflow` shortc
 Example prompt flow:
 
 ```bash
-python3 skill/scripts/generate_image.py \
+python3 skills/nanobanana-image-generation/scripts/generate_image.py \
   "Create an educational materials-science figure about the heat-treatment workflow of metals, covering annealing, quenching, tempering, and microstructure-property evolution. Show furnace heating, hold stage, controlled cooling versus rapid quenching, and the resulting changes in grain structure, hardness, toughness, and residual stress. Include clear arrows, compact panel layout, and concise English labels suitable for a journal-style explanatory figure." \
   --materials-figure processing-workflow \
   --lang en \

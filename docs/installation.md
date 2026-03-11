@@ -4,10 +4,8 @@ This repository is distributed as a multi-agent skill package. The same skill is
 
 ## Included Layouts
 
-- `skill/`
-  Canonical source folder in this repository.
 - `skills/nanobanana-image-generation/`
-  Generic manual-install folder.
+  Canonical source folder in this repository.
 - `.codex/skills/nanobanana-image-generation/`
 - `.claude/skills/nanobanana-image-generation/`
 - `.cursor/skills/nanobanana-image-generation/`
@@ -89,4 +87,4 @@ Optional alternative:
 
 ## Canonical Source
 
-If you need to update the skill, treat `skill/` as the canonical source in this repository and then sync mirrored copies to the platform folders.
+If you need to update the skill, treat `skills/nanobanana-image-generation/` as the canonical source in this repository and then sync mirrored copies to the platform folders.
