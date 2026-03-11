@@ -1,15 +1,110 @@
 # MatFig Nanobanana Skill
 
-Codex skill for materials-science figure generation and image editing with Gemini image models through Zhizengzeng's Google-compatible endpoint.
+Portable AI-agent skill for materials-science figure generation and image editing with Nanobanana / Gemini image models through Zhizengzeng's Google-compatible endpoint.
 
-This repository packages a ready-to-install skill focused on:
+This repository is packaged as a skill distribution repo, not just a script repo. It includes ready-to-drop skill folders for multiple agent ecosystems so other agents can integrate it with minimal setup.
 
-- materials-science paper figures
-- graphical abstracts
-- mechanism diagrams
-- device architecture figures
-- processing workflow figures
-- attachment-based recreation and translation workflows
+## What This Skill Is For
+
+Use this skill when an AI agent needs to:
+
+- generate materials-science paper figures
+- create graphical abstracts
+- render mechanism diagrams
+- draw device architecture figures
+- build processing workflow figures
+- edit scientific images with Gemini image models
+- recreate attachment-only images when exact file-based editing is unavailable
+
+The skill also includes built-in prompt shortcuts for:
+
+- `graphical-abstract`
+- `mechanism-figure`
+- `device-architecture`
+- `processing-workflow`
+
+Both English and Simplified Chinese figure text are supported.
+
+## Quick Setup
+
+### Recommended configuration
+
+Put these in `~/.zshrc`:
+
+```bash
+export NANOBANANA_API_KEY="your_zzz_api_key"
+export NANOBANANA_BASE_URL="https://api.zhizengzeng.com/google"
+export NANOBANANA_MODEL="gemini-3.1-flash-image-preview"
+```
+
+Then reload:
+
+```bash
+source ~/.zshrc
+```
+
+Optional: if you do not want the key stored directly in `~/.zshrc`, the bundled scripts also support `NANOBANANA_API_KEY_FILE` and `--api-key-file`.
+
+## Supported Agent Layouts
+
+This repo already ships the skill in several common locations:
+
+- `skill/`
+  Canonical source folder in this repository.
+- `skills/nanobanana-image-generation/`
+  Generic skill folder for manual copying.
+- `.codex/skills/nanobanana-image-generation/`
+  Codex-style project-local discovery.
+- `.claude/skills/nanobanana-image-generation/`
+  Claude Code style project-local discovery.
+- `.cursor/skills/nanobanana-image-generation/`
+  Cursor-style project-local discovery.
+- `.gemini/skills/nanobanana-image-generation/`
+  Gemini CLI style project-local discovery.
+- `.opencode/skills/nanobanana-image-generation/`
+  OpenCode-style project-local discovery.
+
+If your agent supports project-local skill discovery from one of these paths, cloning this repo is often enough.
+
+## Installation
+
+### Codex
+
+If your workflow supports project-local Codex skills, keep this repo as-is and let Codex read:
+
+```text
+.codex/skills/nanobanana-image-generation/
+```
+
+If you want global installation:
+
+```bash
+cp -R skills/nanobanana-image-generation ~/.codex/skills/
+```
+
+### Claude Code
+
+If your Claude environment supports project-local skills:
+
+```text
+.claude/skills/nanobanana-image-generation/
+```
+
+For manual install:
+
+```bash
+cp -R skills/nanobanana-image-generation ~/.claude/skills/
+```
+
+### Cursor / Gemini / OpenCode
+
+Use the matching prebuilt folder:
+
+- `.cursor/skills/nanobanana-image-generation/`
+- `.gemini/skills/nanobanana-image-generation/`
+- `.opencode/skills/nanobanana-image-generation/`
+
+More explicit platform notes are in [docs/installation.md](docs/installation.md).
 
 ## Repository Layout
 
@@ -18,65 +113,52 @@ matfig-nanobanana-skill/
 ├── README.md
 ├── .gitignore
 ├── docs/
+│   ├── installation.md
 │   └── cases/
 │       └── metal-heat-treatment-1.png
-└── skill/
-    ├── SKILL.md
-    ├── agents/openai.yaml
-    ├── scripts/
-    └── references/
+├── skill/                                   # canonical source
+├── skills/
+│   └── nanobanana-image-generation/         # generic drop-in skill
+├── .codex/skills/
+├── .claude/skills/
+├── .cursor/skills/
+├── .gemini/skills/
+└── .opencode/skills/
 ```
 
-## Install
+## How Agents Should Use This Skill
 
-Copy `skill/` into your Codex skills directory, or keep this repository as the source of truth and sync it into `~/.codex/skills/`.
+When the user asks for:
 
-Example:
+- a materials-science figure
+- a journal-style scientific illustration
+- a graphical abstract
+- a mechanism figure
+- a device architecture figure
+- a synthesis or processing workflow figure
 
-```bash
-cp -R skill ~/.codex/skills/nanobanana-image-generation
-```
+the agent should load the skill and use the built-in materials-science templates instead of improvising a new prompt from scratch.
 
-## Configuration
+The intended workflow is:
 
-Minimum environment:
+1. Pick the closest figure subtype.
+2. Choose `en` or `zh`.
+3. Insert the user's scientific background into the template.
+4. Preserve the template's rules about causality, color palette, typography, layout, and avoiding fabricated claims.
+5. Generate the image through the bundled Gemini-compatible scripts.
 
-```bash
-export NANOBANANA_BASE_URL="https://api.zhizengzeng.com/google"
-export NANOBANANA_MODEL="gemini-3.1-flash-image-preview"
-```
+## Direct Script Usage
 
-Recommended key setup to avoid exposing the API key in commands:
+The repo is primarily packaged as a skill, but direct script invocation is included for testing and automation.
 
-```bash
-mkdir -p .secrets
-printf '%s' 'your_zzz_api_key' > .secrets/nanobanana_api_key
-chmod 600 .secrets/nanobanana_api_key
-export NANOBANANA_API_KEY_FILE="$PWD/.secrets/nanobanana_api_key"
-```
-
-## Usage
-
-### Basic image generation
+### Basic example
 
 ```bash
 python3 skill/scripts/generate_image.py \
-  "Create a clean scientific illustration of a catalyst nanoparticle on an oxide support." \
-  --api-key-file ./.secrets/nanobanana_api_key
+  "Create a clean scientific illustration of a catalyst nanoparticle on an oxide support."
 ```
 
-### Materials-science shortcut
-
-The script can inject built-in prompt templates for materials figures.
-
-Available subtypes:
-
-- `graphical-abstract`
-- `mechanism-figure`
-- `device-architecture`
-- `processing-workflow`
-
-Example:
+### Materials figure shortcut
 
 ```bash
 python3 skill/scripts/generate_image.py \
@@ -85,22 +167,18 @@ python3 skill/scripts/generate_image.py \
   --lang en \
   --style-note "Use a clean publication-style schematic suitable for a metallurgy lecture slide and a materials journal overview figure." \
   --aspect-ratio 4:3 \
-  --image-size 2K \
-  --api-key-file ./.secrets/nanobanana_api_key
+  --image-size 2K
 ```
 
-### Attachment or image editing workflow
+### Image editing
 
 ```bash
 python3 skill/scripts/generate_image.py \
   "Using the provided image, change only the blue sofa to a vintage brown leather Chesterfield sofa. Keep everything else exactly the same." \
-  --input-image ./living-room.png \
-  --api-key-file ./.secrets/nanobanana_api_key
+  --input-image ./living-room.png
 ```
 
-## Output
-
-By default, generated files are saved to:
+Default output directory:
 
 ```text
 ./output/nanobanana/
@@ -112,11 +190,11 @@ relative to the current working directory.
 
 ### Metal heat-treatment workflow figure
 
-The following figure was generated using the built-in `processing-workflow` materials-science shortcut and an English scientific background about annealing, quenching, tempering, and microstructure-property evolution.
+The following image was generated with the built-in `processing-workflow` shortcut for a metallurgy-style educational figure.
 
 ![Metal heat-treatment workflow case](docs/cases/metal-heat-treatment-1.png)
 
-Example generation command:
+Example prompt flow:
 
 ```bash
 python3 skill/scripts/generate_image.py \
@@ -125,8 +203,7 @@ python3 skill/scripts/generate_image.py \
   --lang en \
   --style-note "Use a clean publication-style schematic suitable for a metallurgy lecture slide and a materials journal overview figure." \
   --aspect-ratio 4:3 \
-  --image-size 2K \
-  --api-key-file ./.secrets/nanobanana_api_key
+  --image-size 2K
 ```
 
 ## Notes

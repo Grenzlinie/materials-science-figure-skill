@@ -1,0 +1,92 @@
+# Installation
+
+This repository is distributed as a multi-agent skill package. The same skill is mirrored into several common project-local paths so different agents can discover it without manual repackaging.
+
+## Included Layouts
+
+- `skill/`
+  Canonical source folder in this repository.
+- `skills/nanobanana-image-generation/`
+  Generic manual-install folder.
+- `.codex/skills/nanobanana-image-generation/`
+- `.claude/skills/nanobanana-image-generation/`
+- `.cursor/skills/nanobanana-image-generation/`
+- `.gemini/skills/nanobanana-image-generation/`
+- `.opencode/skills/nanobanana-image-generation/`
+
+## Codex
+
+Project-local:
+
+```text
+.codex/skills/nanobanana-image-generation/
+```
+
+Global manual copy:
+
+```bash
+cp -R skills/nanobanana-image-generation ~/.codex/skills/
+```
+
+## Claude Code
+
+Project-local:
+
+```text
+.claude/skills/nanobanana-image-generation/
+```
+
+Global manual copy:
+
+```bash
+cp -R skills/nanobanana-image-generation ~/.claude/skills/
+```
+
+## Cursor
+
+Project-local:
+
+```text
+.cursor/skills/nanobanana-image-generation/
+```
+
+## Gemini CLI
+
+Project-local:
+
+```text
+.gemini/skills/nanobanana-image-generation/
+```
+
+## OpenCode
+
+Project-local:
+
+```text
+.opencode/skills/nanobanana-image-generation/
+```
+
+## Environment
+
+Recommended in `~/.zshrc`:
+
+```bash
+export NANOBANANA_API_KEY="your_zzz_api_key"
+export NANOBANANA_BASE_URL="https://api.zhizengzeng.com/google"
+export NANOBANANA_MODEL="gemini-3.1-flash-image-preview"
+```
+
+Reload:
+
+```bash
+source ~/.zshrc
+```
+
+Optional alternative:
+
+- `NANOBANANA_API_KEY_FILE`
+- `--api-key-file`
+
+## Canonical Source
+
+If you need to update the skill, treat `skill/` as the canonical source in this repository and then sync mirrored copies to the platform folders.
