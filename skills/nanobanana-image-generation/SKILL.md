@@ -31,14 +31,15 @@ Set environment variables:
 
 ```bash
 export NANOBANANA_API_KEY="your-provider-key"
-export NANOBANANA_BASE_URL="https://your-google-compatible-endpoint.example"
+export NANOBANANA_BASE_URL="https://generativelanguage.googleapis.com"
 export NANOBANANA_MODEL="gemini-3.1-flash-image-preview"
 ```
 
-Example provider:
+Optional third-party provider:
 
 ```bash
 export NANOBANANA_BASE_URL="https://api.zhizengzeng.com/google"
+export NANOBANANA_ALLOW_THIRD_PARTY=1
 ```
 
 If you do not want the API key to appear in the command line, store it in a file and use:
@@ -65,6 +66,12 @@ Recreate an attached diagram with translated labels:
 python3 scripts/generate_image.py "Recreate the attached pastel technical diagram with the same layout, icons, arrows, and hand-drawn style. Replace all visible English labels with natural Simplified Chinese. Keep the composition unchanged." --aspect-ratio 16:9 --image-size 2K
 ```
 
+Safety note:
+
+- `scripts/build_materials_figure_prompt.py` and `--print-prompt` are local-only and do not send data over the network.
+- Actual prompt text, API keys, and user-provided input images are sent only when you run the generation scripts against the configured provider.
+- Non-official Gemini-compatible endpoints require explicit confirmation via `--allow-third-party` or `NANOBANANA_ALLOW_THIRD_PARTY=1`.
+
 ## Workflow
 
 1. Keep the official Gemini request shape.
@@ -84,16 +91,18 @@ python3 scripts/generate_image.py "Recreate the attached pastel technical diagra
 
 Required:
 - `NANOBANANA_API_KEY`
+- `NANOBANANA_BASE_URL`
+  Must be set explicitly. Official Google endpoint: `https://generativelanguage.googleapis.com`
 
 Optional:
-- `NANOBANANA_BASE_URL`
-  Default example: `https://api.zhizengzeng.com/google`
 - `NANOBANANA_MODEL`
   Default: `gemini-3.1-flash-image-preview`
 - `NANOBANANA_TIMEOUT`
   Default: `120`
 - `NANOBANANA_API_KEY_FILE`
   Path to a file containing the API key. Prefer this when you do not want the key shown in command history or command logs.
+- `NANOBANANA_ALLOW_THIRD_PARTY`
+  Set to `1` only when you intentionally want to send API keys and user-provided files to a non-official Gemini-compatible provider.
 
 ## Scripts
 
@@ -114,6 +123,7 @@ Common options:
 - `--lang zh`
 - `--style-note "Nature Energy style"`
 - `--print-prompt`
+- `--allow-third-party`
 - `--api-key-file ./.secrets/nanobanana_api_key`
 
 Default output location:
@@ -129,10 +139,12 @@ Official Google examples:
 Third-party provider replacements:
 - `api_key="your_provider_api_key"`
 - `base_url="your_google_compatible_endpoint"`
+- `allow_third_party=true`
 
-Zhizengzeng example:
+Optional Zhizengzeng example:
 - `api_key="your_zzz_api_key"`
 - `base_url="https://api.zhizengzeng.com/google"`
+- `allow_third_party=true`
 
 Everything else should stay aligned with the official Gemini documentation.
 
@@ -200,6 +212,8 @@ python3 scripts/build_materials_figure_prompt.py \
 ## Failure Handling
 
 - If the API returns `401` or `403`, verify `NANOBANANA_API_KEY`.
+- If the CLI says the base URL is missing, set `NANOBANANA_BASE_URL` or pass `--base-url`.
+- If the CLI refuses a non-official endpoint, add `--allow-third-party` or set `NANOBANANA_ALLOW_THIRD_PARTY=1` only if that provider is intentional.
 - If the API returns `404`, verify that the request is going to `/v1beta/models/{model}:generateContent`.
 - If the provider says the model does not exist, verify the exact model name in the official docs and the provider's supported model list.
 - If no image is returned, inspect `candidates[0].content.parts` and check whether the request asked for image output.

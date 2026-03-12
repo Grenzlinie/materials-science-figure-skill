@@ -5,15 +5,22 @@
 Use the official Gemini `generateContent` API shape and replace the provider-specific values:
 
 - Official base URL: `https://generativelanguage.googleapis.com`
-- Third-party base URL: your Google-compatible Gemini endpoint
+- Third-party base URL: your Google-compatible Gemini endpoint, only when explicitly intended
 
 - Official API key: `GEMINI_API_KEY`
 - Third-party API key: the provider key
 
-Example provider:
+Optional third-party provider example:
 
 - Zhizengzeng base URL: `https://api.zhizengzeng.com/google`
 - Zhizengzeng API key: the user's ZZZ key
+- Third-party confirmation: `NANOBANANA_ALLOW_THIRD_PARTY=1` or `--allow-third-party`
+
+## Endpoint Safety
+
+- The generation scripts are designed to fail closed when `NANOBANANA_BASE_URL` or `--base-url` is missing.
+- Official Google endpoint is the recommended default: `https://generativelanguage.googleapis.com`
+- If you point the scripts to any other hostname, they should require explicit third-party confirmation before sending API keys or user-provided files.
 
 ## Route
 
@@ -111,3 +118,4 @@ Read outputs from:
 - `imageSize` uses official values like `512`, `1K`, `2K`, `4K`.
 - `aspectRatio` uses official values like `1:1`, `3:2`, `16:9`, `21:9`.
 - For edit workflows, do not invent a separate edit endpoint. Use `generateContent` with prompt plus image inputs.
+- Prompt-only helpers such as `build_materials_figure_prompt.py` and `--print-prompt` should remain local-only and not send data to the network.

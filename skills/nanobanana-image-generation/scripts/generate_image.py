@@ -9,12 +9,14 @@ import json
 import mimetypes
 import os
 import sys
+import urllib.parse
 import urllib.error
 import urllib.request
 from pathlib import Path
 
 
-DEFAULT_BASE_URL = "https://api.zhizengzeng.com/google"
+OFFICIAL_BASE_URL = "https://generativelanguage.googleapis.com"
+OFFICIAL_HOSTNAME = "generativelanguage.googleapis.com"
 DEFAULT_MODEL = "gemini-3.1-flash-image-preview"
 DEFAULT_TIMEOUT = 120
 
@@ -54,7 +56,11 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--out-dir", default="./output/nanobanana", help="Output directory.")
     parser.add_argument("--prefix", default="nanobanana", help="Saved filename prefix.")
-    parser.add_argument("--base-url", default=os.getenv("NANOBANANA_BASE_URL", DEFAULT_BASE_URL))
+    parser.add_argument(
+        "--base-url",
+        default=os.getenv("NANOBANANA_BASE_URL"),
+        help=f"Gemini-compatible base URL. Must be set explicitly, e.g. {OFFICIAL_BASE_URL}.",
+    )
     parser.add_argument("--model", default=os.getenv("NANOBANANA_MODEL", DEFAULT_MODEL))
     parser.add_argument(
         "--api-key",
@@ -100,7 +106,42 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Print the resolved final prompt and exit without calling the API.",
     )
+    parser.add_argument(
+        "--allow-third-party",
+        action="store_true",
+        help="Explicitly allow sending API keys and input files to a non-official Gemini-compatible provider.",
+    )
     return parser
+
+
+def resolve_base_url(args: argparse.Namespace) -> str:
+    base_url = args.base_url
+    if not base_url:
+        raise SystemExit(
+            "Missing base URL. Set NANOBANANA_BASE_URL or pass --base-url explicitly. "
+            f"Official Google example: {OFFICIAL_BASE_URL}"
+        )
+
+    parsed = urllib.parse.urlparse(base_url)
+    if parsed.scheme != "https" or not parsed.netloc:
+        raise SystemExit(f"Invalid base URL: {base_url}. Use an explicit https URL such as {OFFICIAL_BASE_URL}.")
+    return base_url.rstrip("/")
+
+
+def assert_endpoint_allowed(base_url: str, args: argparse.Namespace) -> None:
+    hostname = urllib.parse.urlparse(base_url).hostname or ""
+    allow_third_party = args.allow_third_party or os.getenv("NANOBANANA_ALLOW_THIRD_PARTY") == "1"
+    if hostname != OFFICIAL_HOSTNAME and not allow_third_party:
+        raise SystemExit(
+            "Refusing to send API keys or user-provided files to a third-party Gemini-compatible provider. "
+            "If you intend to use a non-official endpoint, set NANOBANANA_ALLOW_THIRD_PARTY=1 "
+            "or pass --allow-third-party. "
+            f"Official Google endpoint: {OFFICIAL_BASE_URL}"
+        )
+
+
+def load_input_images(image_paths: list[str]) -> list[dict]:
+    return [file_to_inline_part(path_str) for path_str in image_paths]
 
 
 def file_to_inline_part(path_str: str) -> dict:
@@ -151,7 +192,7 @@ def resolve_api_key(args: argparse.Namespace) -> str:
 
 def build_payload(args: argparse.Namespace) -> dict:
     parts = [{"text": resolve_prompt(args)}]
-    parts.extend(file_to_inline_part(path_str) for path_str in args.input_image)
+    parts.extend(load_input_images(args.input_image))
 
     payload = {
         "contents": [
@@ -187,10 +228,12 @@ def build_payload(args: argparse.Namespace) -> dict:
 
 
 def request_json(args: argparse.Namespace) -> dict:
+    base_url = resolve_base_url(args)
+    assert_endpoint_allowed(base_url, args)
     api_key = resolve_api_key(args)
 
     request = urllib.request.Request(
-        f"{args.base_url.rstrip('/')}/v1beta/models/{args.model}:generateContent",
+        f"{base_url}/v1beta/models/{args.model}:generateContent",
         data=json.dumps(build_payload(args)).encode("utf-8"),
         headers={
             "Content-Type": "application/json",

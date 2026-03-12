@@ -2,8 +2,10 @@
 
 const fs = require("fs");
 const path = require("path");
+const { URL } = require("url");
 
-const DEFAULT_BASE_URL = process.env.NANOBANANA_BASE_URL || "https://api.zhizengzeng.com/google";
+const OFFICIAL_BASE_URL = "https://generativelanguage.googleapis.com";
+const OFFICIAL_HOSTNAME = "generativelanguage.googleapis.com";
 const DEFAULT_MODEL = process.env.NANOBANANA_MODEL || "gemini-3.1-flash-image-preview";
 const DEFAULT_TIMEOUT = Number(process.env.NANOBANANA_TIMEOUT || "120");
 
@@ -22,7 +24,7 @@ function parseArgs(argv) {
     inputImages: [],
     outDir: "./output/nanobanana",
     prefix: "nanobanana",
-    baseUrl: DEFAULT_BASE_URL,
+    baseUrl: process.env.NANOBANANA_BASE_URL || "",
     model: DEFAULT_MODEL,
     apiKey: process.env.NANOBANANA_API_KEY || "",
     apiKeyFile: process.env.NANOBANANA_API_KEY_FILE || "",
@@ -33,6 +35,7 @@ function parseArgs(argv) {
     thinkingLevel: "",
     timeout: DEFAULT_TIMEOUT,
     printPrompt: false,
+    allowThirdParty: false,
   };
 
   const parts = [...argv];
@@ -53,6 +56,10 @@ function parseArgs(argv) {
     }
     if (key === "--print-prompt") {
       args.printPrompt = true;
+      continue;
+    }
+    if (key === "--allow-third-party") {
+      args.allowThirdParty = true;
       continue;
     }
 
@@ -134,6 +141,43 @@ function imagePathToPart(imagePath) {
   };
 }
 
+function resolveBaseUrl(args) {
+  if (!args.baseUrl) {
+    throw new Error(
+      `Missing base URL. Set NANOBANANA_BASE_URL or pass --base-url explicitly. Official Google example: ${OFFICIAL_BASE_URL}`,
+    );
+  }
+
+  let parsed;
+  try {
+    parsed = new URL(args.baseUrl);
+  } catch {
+    throw new Error(`Invalid base URL: ${args.baseUrl}. Use an explicit https URL such as ${OFFICIAL_BASE_URL}.`);
+  }
+
+  if (parsed.protocol !== "https:") {
+    throw new Error(`Invalid base URL: ${args.baseUrl}. Use an explicit https URL such as ${OFFICIAL_BASE_URL}.`);
+  }
+
+  return args.baseUrl.replace(/\/$/, "");
+}
+
+function assertEndpointAllowed(baseUrl, args) {
+  const hostname = new URL(baseUrl).hostname;
+  const allowThirdParty = args.allowThirdParty || process.env.NANOBANANA_ALLOW_THIRD_PARTY === "1";
+  if (hostname !== OFFICIAL_HOSTNAME && !allowThirdParty) {
+    throw new Error(
+      "Refusing to send API keys or user-provided files to a third-party Gemini-compatible provider. " +
+      "If you intend to use a non-official endpoint, set NANOBANANA_ALLOW_THIRD_PARTY=1 or pass --allow-third-party. " +
+      `Official Google endpoint: ${OFFICIAL_BASE_URL}`,
+    );
+  }
+}
+
+function loadInputImages(imagePaths) {
+  return imagePaths.map(imagePathToPart);
+}
+
 function resolvePrompt(args) {
   let rawPrompt = args.prompt;
   if (args.promptFile) {
@@ -178,7 +222,7 @@ function resolveApiKey(args) {
 }
 
 function buildPayload(args) {
-  const parts = [{ text: resolvePrompt(args) }, ...args.inputImages.map(imagePathToPart)];
+  const parts = [{ text: resolvePrompt(args) }, ...loadInputImages(args.inputImages)];
   const payload = {
     contents: [
       {
@@ -214,6 +258,8 @@ function buildPayload(args) {
 }
 
 async function requestJson(args) {
+  const baseUrl = resolveBaseUrl(args);
+  assertEndpointAllowed(baseUrl, args);
   const apiKey = resolveApiKey(args);
 
   const controller = new AbortController();
@@ -221,7 +267,7 @@ async function requestJson(args) {
 
   try {
     const response = await fetch(
-      `${args.baseUrl.replace(/\/$/, "")}/v1beta/models/${args.model}:generateContent`,
+      `${baseUrl}/v1beta/models/${args.model}:generateContent`,
       {
         method: "POST",
         headers: {

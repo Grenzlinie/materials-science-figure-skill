@@ -51,14 +51,17 @@ fi
 
 case "$1" in
   --all)
-    mapfile -t skill_dirs < <(find "$SOURCE_ROOT" -mindepth 1 -maxdepth 1 -type d | sort)
-    if [[ ${#skill_dirs[@]} -eq 0 ]]; then
+    skill_dirs="$(find "$SOURCE_ROOT" -mindepth 1 -maxdepth 1 -type d | sort)"
+    if [[ -z "$skill_dirs" ]]; then
       echo "No skills found under $SOURCE_ROOT" >&2
       exit 1
     fi
-    for skill_dir in "${skill_dirs[@]}"; do
+    while IFS= read -r skill_dir; do
+      [[ -z "$skill_dir" ]] && continue
       copy_skill "$(basename "$skill_dir")"
-    done
+    done <<EOF
+$skill_dirs
+EOF
     ;;
   -h|--help)
     usage

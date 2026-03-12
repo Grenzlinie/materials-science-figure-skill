@@ -117,7 +117,7 @@ Put these in `~/.zshrc`:
 
 ```bash
 export NANOBANANA_API_KEY="your_provider_api_key"
-export NANOBANANA_BASE_URL="https://your-google-compatible-endpoint.example"
+export NANOBANANA_BASE_URL="https://generativelanguage.googleapis.com"
 export NANOBANANA_MODEL="gemini-3.1-flash-image-preview"
 ```
 
@@ -129,11 +129,19 @@ source ~/.zshrc
 
 Optional: if you do not want the key stored directly in `~/.zshrc`, the bundled scripts also support `NANOBANANA_API_KEY_FILE` and `--api-key-file`.
 
-Provider note:
+Safety note:
+
+- `NANOBANANA_BASE_URL` must be set explicitly. There is no silent default provider.
+- Prompt-only helpers such as `build_materials_figure_prompt.py` and `--print-prompt` are local-only and do not upload data.
+- Actual generation requests send prompts, API keys, and any user-provided input images to the configured provider.
+- Non-official Gemini-compatible endpoints require explicit opt-in via `NANOBANANA_ALLOW_THIRD_PARTY=1` or `--allow-third-party`.
+
+Optional third-party provider note:
 
 - Any third-party endpoint that is compatible with the Gemini `generateContent` API shape should work.
 - Zhizengzeng is one supported example:
   - `NANOBANANA_BASE_URL="https://api.zhizengzeng.com/google"`
+  - `NANOBANANA_ALLOW_THIRD_PARTY=1`
 
 ## Supported Agent Layouts
 
@@ -274,6 +282,7 @@ python3 skills/nanobanana-image-generation/scripts/generate_image.py \
   "Steel heat treatment covering annealing, quenching, tempering, and the resulting microstructure-property evolution." \
   --materials-figure processing-workflow \
   --lang en \
+  --base-url https://generativelanguage.googleapis.com \
   --style-note "Use a clean publication-style schematic suitable for a metallurgy lecture slide and a materials journal overview figure." \
   --aspect-ratio 4:3 \
   --image-size 2K
@@ -285,6 +294,7 @@ Long scientific background from file:
 python3 skills/nanobanana-image-generation/scripts/generate_image.py \
   --materials-figure mechanism-figure \
   --lang en \
+  --base-url https://generativelanguage.googleapis.com \
   --prompt-file ./background.md \
   --style-note "Nature Energy style" \
   --aspect-ratio 4:3 \
@@ -296,6 +306,7 @@ python3 skills/nanobanana-image-generation/scripts/generate_image.py \
 ```bash
 python3 skills/nanobanana-image-generation/scripts/generate_image.py \
   "Using the provided image, change only the blue sofa to a vintage brown leather Chesterfield sofa. Keep everything else exactly the same." \
+  --base-url https://generativelanguage.googleapis.com \
   --input-image ./living-room.png
 ```
 
@@ -310,6 +321,6 @@ relative to the current working directory.
 ## Notes
 
 - The skill follows the official Gemini `generateContent` request shape and works with third-party Google-compatible Gemini endpoints.
-- Zhizengzeng is one example provider, not a hard requirement.
+- Third-party Gemini-compatible endpoints are supported only when explicitly configured and confirmed.
 - For attachment-only chat images, exact pixel-preserving editing may still require access to a real file path.
 - Generated figures are best treated as first-pass publication visuals; exact scientific typography and quantitative plots should still be reviewed by a human.
