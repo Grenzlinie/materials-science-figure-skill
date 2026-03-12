@@ -1,4 +1,4 @@
 interface:
   display_name: "Nanobanana Images"
-  short_description: "Generate images with Nanobanana"
-  default_prompt: "Use $nanobanana-image-generation to generate or edit an image with Google Nanobanana and save the output locally."
+  short_description: "Generate or edit materials figures with Nanobanana"
+  default_prompt: "Use $nanobanana-image-generation to build a materials-science figure prompt, then generate or edit the image with a Gemini-compatible Nanobanana endpoint and save the output locally."

@@ -4,16 +4,70 @@ Portable AI-agent skill for materials-science figure generation and image editin
 
 This repository is packaged as a skill distribution repo, not just a script repo. It includes ready-to-drop skill folders for multiple agent ecosystems so other agents can integrate it with minimal setup.
 
+便携式 AI 智能体技能，用于材料科学图表生成和图像编辑，通过任何兼容 Google 的 Gemini 端点使用 Nanobanana / Gemini 图像模型。
+
+本仓库以技能分发仓库的形式打包，而不仅仅是脚本仓库。它包含可直接投放的多个智能体生态系统的技能文件夹，以便其他智能体能够以最小设置进行集成。
+
 ## One-Command Install
 (Recommened) Use skill.sh CLI and select which coding agent you want to install the skill.
 ```bash
 npx skills add https://github.com/Grenzlinie/materials-science-figure-skill --skill nanobanana-image-generation
 ```
 
-Use the bundled installer:
+Recommended: use `npx skills add` to install `nanobanana-image-generation` directly from this repository.
 
 ```bash
-chmod +x skill.sh
+npx skills add https://github.com/Grenzlinie/materials-science-figure-skill --skill nanobanana-image-generation
+```
+
+> Or you can just give the AI the link to this GitHub repository and let it execute commands according to the instructions.
+> 或者你直接把这个 Github 仓库的链接给 AI，让他根据说明来执行命令就好了。
+
+## Case Study
+
+### Metal heat-treatment workflow figure
+
+The following image was produced in a Codex conversation using this skill for a metallurgy-style educational figure.
+
+![Metal heat-treatment workflow case](docs/cases/metal-heat-treatment-1.png)
+
+Example Codex CLI prompt:
+
+```bash
+codex "生成一张材料科学示意图，主题是金属热处理流程，包含退火、淬火、回火，以及显微组织和力学性能的变化。要求白底、清晰箭头、适合论文或课程讲义。"
+```
+
+You can also ask in English:
+
+```bash
+codex "Generate a materials-science workflow figure for metal heat treatment, covering annealing, quenching, tempering, and microstructure-property evolution. Use a clean white background, clear arrows, and a journal-style schematic layout."
+```
+
+
+
+Another Case:
+
+![OM analysis workflow case](docs/cases/metallography_optical_segmentation-1.png)
+
+Example Codex CLI prompt:
+
+```bash
+codex "生成一张材料科学示意图，主题是金相的光学显微镜识别，涵盖图像拍摄，预处理，光学图像识别，深度学习分割，后处理，晶粒分析输出等各个部分。"
+```
+
+You can also ask in English:
+
+```bash
+codex "Generate a schematic diagram of materials science, with the theme of optical microscope identification of metallography, covering various parts such as image acquisition, preprocessing, optical image recognition, deep learning segmentation, post-processing, and grain analysis output."
+```
+
+
+
+## skill.sh Install
+
+For command line users, use the bundled installer:
+
+```bash
 ./skill.sh codex
 ```
 
@@ -30,21 +84,6 @@ Global install example:
 
 ```bash
 ./skill.sh codex --global
-```
-
-## Claude Quick Add
-
-For Claude-style project-local setup:
-
-```bash
-./skill.sh claude
-```
-
-Manual equivalent:
-
-```bash
-mkdir -p .claude/skills
-cp -R skills/nanobanana-image-generation .claude/skills/nanobanana-image-generation
 ```
 
 ## What This Skill Is For
@@ -67,6 +106,8 @@ The skill also includes built-in prompt shortcuts for:
 - `processing-workflow`
 
 Both English and Simplified Chinese figure text are supported.
+
+
 
 ## Quick Setup
 
@@ -191,8 +232,29 @@ The intended workflow is:
 1. Pick the closest figure subtype.
 2. Choose `en` or `zh`.
 3. Insert the user's scientific background into the template.
-4. Preserve the template's rules about causality, color palette, typography, layout, and avoiding fabricated claims.
-5. Generate the image through the bundled Gemini-compatible scripts.
+4. Inspect or refine the resolved prompt first when the figure is scientifically dense or style-sensitive.
+5. Preserve the template's rules about causality, color palette, typography, layout, and avoiding fabricated claims.
+6. Generate the image through the bundled Gemini-compatible scripts.
+
+Prompt-first preflight:
+
+```bash
+python3 skills/nanobanana-image-generation/scripts/build_materials_figure_prompt.py \
+  --materials-figure mechanism-figure \
+  --lang en \
+  --background-file ./background.md \
+  --style-note "Nature Materials aesthetic with concise panel labels."
+```
+
+You can also inspect the resolved prompt directly from the generation CLIs:
+
+```bash
+python3 skills/nanobanana-image-generation/scripts/generate_image.py \
+  --materials-figure processing-workflow \
+  --lang en \
+  --prompt-file ./background.md \
+  --print-prompt
+```
 
 ## Direct Script Usage
 
@@ -217,6 +279,18 @@ python3 skills/nanobanana-image-generation/scripts/generate_image.py \
   --image-size 2K
 ```
 
+Long scientific background from file:
+
+```bash
+python3 skills/nanobanana-image-generation/scripts/generate_image.py \
+  --materials-figure mechanism-figure \
+  --lang en \
+  --prompt-file ./background.md \
+  --style-note "Nature Energy style" \
+  --aspect-ratio 4:3 \
+  --image-size 2K
+```
+
 ### Image editing
 
 ```bash
@@ -232,26 +306,6 @@ Default output directory:
 ```
 
 relative to the current working directory.
-
-## Case Study
-
-### Metal heat-treatment workflow figure
-
-The following image was generated with the built-in `processing-workflow` shortcut for a metallurgy-style educational figure.
-
-![Metal heat-treatment workflow case](docs/cases/metal-heat-treatment-1.png)
-
-Example prompt flow:
-
-```bash
-python3 skills/nanobanana-image-generation/scripts/generate_image.py \
-  "Create an educational materials-science figure about the heat-treatment workflow of metals, covering annealing, quenching, tempering, and microstructure-property evolution. Show furnace heating, hold stage, controlled cooling versus rapid quenching, and the resulting changes in grain structure, hardness, toughness, and residual stress. Include clear arrows, compact panel layout, and concise English labels suitable for a journal-style explanatory figure." \
-  --materials-figure processing-workflow \
-  --lang en \
-  --style-note "Use a clean publication-style schematic suitable for a metallurgy lecture slide and a materials journal overview figure." \
-  --aspect-ratio 4:3 \
-  --image-size 2K
-```
 
 ## Notes
 

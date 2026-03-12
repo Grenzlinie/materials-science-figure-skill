@@ -73,9 +73,11 @@ python3 scripts/generate_image.py "Recreate the attached pastel technical diagra
    Text-only generation uses one text part. Image editing appends one or more inline image parts.
 3. Put image options in `generationConfig.imageConfig`.
    Prefer `--aspect-ratio` and `--image-size`, matching the official docs.
-4. Save image outputs from `candidates[0].content.parts[].inlineData`.
+4. For materials-science figures, prefer building the final prompt first.
+   Use `python3 scripts/build_materials_figure_prompt.py --materials-figure ...` when you want to inspect or refine the prompt before sending any API request.
+5. Save image outputs from `candidates[0].content.parts[].inlineData`.
    Save text parts too when returned.
-5. If the source image is attachment-only, choose between exact edit and recreation.
+6. If the source image is attachment-only, choose between exact edit and recreation.
    Ask for a local path for exact editing. Use recreation if the user wants the result and accepts a visually matched redraw.
 
 ## Environment
@@ -102,6 +104,7 @@ Optional:
 
 Common options:
 - `--input-image ./source.png`
+- `--prompt-file ./background.md`
 - `--aspect-ratio 16:9`
 - `--image-size 2K`
 - `--text-only`
@@ -110,6 +113,7 @@ Common options:
 - `--materials-figure mechanism-figure`
 - `--lang zh`
 - `--style-note "Nature Energy style"`
+- `--print-prompt`
 - `--api-key-file ./.secrets/nanobanana_api_key`
 
 Default output location:
@@ -160,6 +164,7 @@ Workflow:
 5. Preserve the template's constraints about causality, palette, typography, layout, and avoiding unsupported claims.
 6. If the user did not provide exact numbers, keep labels qualitative or explicitly use placeholders rather than fabricating data.
 7. If the user wants a specific journal style, append that preference after the template rather than rewriting the template.
+8. If the scientific background is long, put it in a markdown file and use `--prompt-file` or `scripts/build_materials_figure_prompt.py --background-file ...` instead of squeezing it into one shell argument.
 
 Python shortcut:
 
@@ -180,6 +185,16 @@ node scripts/generate_image.js "paste the scientific background here" \
   --lang zh \
   --aspect-ratio 4:3 \
   --image-size 2K
+```
+
+Prompt-only preflight:
+
+```bash
+python3 scripts/build_materials_figure_prompt.py \
+  --materials-figure mechanism-figure \
+  --lang en \
+  --background-file ./background.md \
+  --style-note "Nature Materials aesthetic with concise panel labels."
 ```
 
 ## Failure Handling
