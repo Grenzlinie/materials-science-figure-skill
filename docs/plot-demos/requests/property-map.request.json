@@ -1,0 +1,39 @@
+{
+  "suptitle": "Property Mapping",
+  "layout": {
+    "nrows": 1,
+    "ncols": 2,
+    "figsize": [12, 4.5]
+  },
+  "panels": [
+    {
+      "kind": "heatmap",
+      "title": "Optimization Heatmap",
+      "colorbar_label": "Normalized Score",
+      "annotate": true,
+      "data": {
+        "matrix": [
+          [0.15, 0.28, 0.41, 0.46],
+          [0.22, 0.39, 0.54, 0.63],
+          [0.31, 0.48, 0.68, 0.79],
+          [0.36, 0.55, 0.73, 0.84]
+        ],
+        "x_labels": ["100C", "150C", "200C", "250C"],
+        "y_labels": ["2 h", "4 h", "6 h", "8 h"]
+      }
+    },
+    {
+      "kind": "scatter",
+      "title": "Bandgap vs Conductivity",
+      "xlabel": "Band Gap (eV)",
+      "ylabel": "Conductivity (S cm^-1)",
+      "color": "blue_main",
+      "size": 90,
+      "alpha": 0.85,
+      "data": {
+        "x": [1.05, 1.18, 1.32, 1.44, 1.57, 1.73],
+        "y": [185, 214, 248, 279, 301, 336]
+      }
+    }
+  ]
+}

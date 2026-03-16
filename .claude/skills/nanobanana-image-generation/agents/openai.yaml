@@ -1,4 +1,4 @@
 interface:
   display_name: "Nanobanana Images"
-  short_description: "Generate or edit materials figures with Nanobanana"
-  default_prompt: "Use $nanobanana-image-generation to build a materials-science figure prompt, then generate or edit the image with a Gemini-compatible Nanobanana endpoint and save the output locally."
+  short_description: "Generate materials figures or plot exact charts from natural-language requests"
+  default_prompt: "Use $nanobanana-image-generation in image mode for graphical abstracts and mechanism figures, or in plot mode to translate a natural-language plotting request into an internal spec and render exact publication-style bar, trend, heatmap, or scatter figures from data."

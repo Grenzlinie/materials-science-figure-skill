@@ -1,10 +1,10 @@
 # Materials Science Figure Skill
 
-Portable AI-agent skill for materials-science figure generation and image editing with Nanobanana / Gemini image models through any Google-compatible Gemini endpoint.
+Portable AI-agent skill for materials-science figure generation, exact publication plotting, and image editing with Nanobanana / Gemini image models through any Google-compatible Gemini endpoint.
 
 This repository is packaged as a skill distribution repo, not just a script repo. It includes ready-to-drop skill folders for multiple agent ecosystems so other agents can integrate it with minimal setup.
 
-便携式 AI 智能体技能，用于材料科学图表生成和图像编辑，通过任何兼容 Google 的 Gemini 端点使用 Nanobanana / Gemini 图像模型。
+便携式 AI 智能体技能，用于材料科学图表生成、精确论文作图与图像编辑，通过任何兼容 Google 的 Gemini 端点使用 Nanobanana / Gemini 图像模型。
 
 本仓库以技能分发仓库的形式打包，而不仅仅是脚本仓库。它包含可直接投放的多个智能体生态系统的技能文件夹，以便其他智能体能够以最小设置进行集成。
 
@@ -23,7 +23,65 @@ npx skills add https://github.com/Grenzlinie/materials-science-figure-skill --sk
 > Or you can just give the AI the link to this GitHub repository and let it execute commands according to the instructions.
 > 或者你直接把这个 Github 仓库的链接给 AI，让他根据说明来执行命令就好了。
 
-## Case Study
+## Two Modes
+
+This skill now supports two complementary workflows:
+
+- `image` mode
+  Use Nanobanana or Gemini image generation for graphical abstracts, mechanism figures, device schematics, and scientific image editing.
+- `plot` mode
+  Use the bundled Python plotting tool for exact publication-style bar charts, trend curves, heatmaps, scatter plots, and multi-panel figures.
+
+When a user is talking to Codex in natural language, they do not need to hand-write a plotting spec. Codex can translate a natural-language plotting request into an internal request or spec and then render the exact figure.
+
+## Plot Mode Demos
+
+### Benchmark overview
+
+![Benchmark overview demo](docs/plot-demos/images/benchmark-overview.png)
+
+Natural-language style request:
+
+```text
+Plot a grouped benchmark chart comparing Ours, Baseline A, and Baseline B over AUC, F1, Recall, and Precision. Use a blue-green-red publication palette, annotate the bars, and place the legend in a separate panel.
+```
+
+Files:
+
+- Request JSON: `docs/plot-demos/requests/benchmark-overview.request.json`
+- Expanded spec: `docs/plot-demos/specs/benchmark-overview.spec.json`
+
+### Training dynamics with shared legend
+
+![Training dynamics demo](docs/plot-demos/images/training-dynamics.png)
+
+Natural-language style request:
+
+```text
+Create a 1x3 publication figure. The first two panels should show training and validation accuracy curves for Ours and Baseline with uncertainty bands. Reserve the last panel only for the legend.
+```
+
+Files:
+
+- Request JSON: `docs/plot-demos/requests/training-dynamics.request.json`
+- Expanded spec: `docs/plot-demos/specs/training-dynamics.spec.json`
+
+### Heatmap plus scatter property map
+
+![Property map demo](docs/plot-demos/images/property-map.png)
+
+Natural-language style request:
+
+```text
+Render a two-panel materials-property figure with a heatmap of optimization scores on the left and a bandgap-versus-conductivity scatter plot on the right. Keep the styling clean, journal-like, and white-background.
+```
+
+Files:
+
+- Request JSON: `docs/plot-demos/requests/property-map.request.json`
+- Expanded spec: `docs/plot-demos/specs/property-map.spec.json`
+
+## Image Mode Case Study
 
 ### Metal heat-treatment workflow figure
 
@@ -45,7 +103,7 @@ codex "Generate a materials-science workflow figure for metal heat treatment, co
 
 
 
-Another Case:
+Another case:
 
 ![OM analysis workflow case](docs/cases/metallography_optical_segmentation-1.png)
 
@@ -91,6 +149,7 @@ Global install example:
 Use this skill when an AI agent needs to:
 
 - generate materials-science paper figures
+- render exact publication-style plots from numeric data
 - create graphical abstracts
 - render mechanism diagrams
 - draw device architecture figures
@@ -106,8 +165,6 @@ The skill also includes built-in prompt shortcuts for:
 - `processing-workflow`
 
 Both English and Simplified Chinese figure text are supported.
-
-
 
 ## Quick Setup
 
@@ -226,6 +283,7 @@ materials-science-figure-skill/
 
 When the user asks for:
 
+- an exact bar chart, trend chart, heatmap, scatter plot, or multi-panel scientific figure
 - a materials-science figure
 - a journal-style scientific illustration
 - a graphical abstract
@@ -233,16 +291,29 @@ When the user asks for:
 - a device architecture figure
 - a synthesis or processing workflow figure
 
-the agent should load the skill and use the built-in materials-science templates instead of improvising a new prompt from scratch.
+the agent should load the skill and choose between plot mode and image mode instead of improvising a new workflow from scratch.
 
 The intended workflow is:
 
-1. Pick the closest figure subtype.
-2. Choose `en` or `zh`.
-3. Insert the user's scientific background into the template.
-4. Inspect or refine the resolved prompt first when the figure is scientifically dense or style-sensitive.
-5. Preserve the template's rules about causality, color palette, typography, layout, and avoiding fabricated claims.
-6. Generate the image through the bundled Gemini-compatible scripts.
+1. Decide whether the user needs exact numeric plotting or image-first figure generation.
+2. For plot mode:
+   Translate the user's natural-language request into an internal plot request or full spec, then render with the bundled plotting scripts.
+3. For image mode:
+   Pick the closest figure subtype.
+4. Choose `en` or `zh`.
+5. Insert the user's scientific background into the template.
+6. Inspect or refine the resolved prompt first when the figure is scientifically dense or style-sensitive.
+7. Preserve the template's rules about causality, color palette, typography, layout, and avoiding fabricated claims.
+8. Generate the image through the bundled Gemini-compatible scripts.
+
+Plot-first flow:
+
+```bash
+python3 skills/nanobanana-image-generation/scripts/build_plot_spec.py ./request.json --out ./spec.json
+.venv/bin/python skills/nanobanana-image-generation/scripts/plot_publication_figure.py ./spec.json \
+  --out-path ./output/plots/result \
+  --formats png pdf svg
+```
 
 Prompt-first preflight:
 
@@ -318,9 +389,23 @@ Default output directory:
 
 relative to the current working directory.
 
+### Exact plotting
+
+```bash
+python3 skills/nanobanana-image-generation/scripts/build_plot_spec.py \
+  docs/plot-demos/requests/benchmark-overview.request.json \
+  --out /tmp/benchmark.spec.json
+
+.venv/bin/python skills/nanobanana-image-generation/scripts/plot_publication_figure.py \
+  /tmp/benchmark.spec.json \
+  --out-path ./output/plots/benchmark-overview \
+  --formats png pdf svg
+```
+
 ## Notes
 
-- The skill follows the official Gemini `generateContent` request shape and works with third-party Google-compatible Gemini endpoints.
+- The image-generation side follows the official Gemini `generateContent` request shape and works with third-party Google-compatible Gemini endpoints.
+- The plot side produces exact publication-style figures from numeric data and is intended for deterministic scientific plotting.
 - Third-party Gemini-compatible endpoints are supported only when explicitly configured and confirmed.
 - For attachment-only chat images, exact pixel-preserving editing may still require access to a real file path.
-- Generated figures are best treated as first-pass publication visuals; exact scientific typography and quantitative plots should still be reviewed by a human.
+- Generated image-mode figures are best treated as first-pass publication visuals; exact scientific typography should still be reviewed by a human.

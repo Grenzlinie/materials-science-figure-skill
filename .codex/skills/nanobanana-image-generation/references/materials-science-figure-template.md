@@ -2,6 +2,26 @@
 
 Use these templates when the user asks for a materials-science paper figure, graphical abstract, schematic mechanism figure, processing workflow figure, or device architecture figure.
 
+## Embedded Publication Rules
+
+These templates now absorb the repository's bundled publication-figure guidance adapted from `figures4papers`.
+
+Apply these defaults unless the user explicitly asks for another direction:
+
+- white background
+- Helvetica or Arial-like sans-serif typography
+- concise panel labels and short legend text
+- semantic color mapping:
+  - blue for the primary pathway, main mechanism, or proposed design
+  - green for beneficial states or improvements
+  - red for contrasts, competing routes, or adverse states
+  - neutral gray for substrates, scaffolds, and non-focal structure
+- balanced panel composition with consistent spacing
+- clean arrows and explicit causal flow
+- modular vector-friendly shapes suitable for later editing
+
+If the request contains chart-like panels, also align with [publication-chart-patterns.md](publication-chart-patterns.md). If the request is an exact quantitative chart from raw numbers, do not overstate Nanobanana's numeric fidelity.
+
 ## How To Use
 
 - Pick the closest subtype:
@@ -14,6 +34,7 @@ Use these templates when the user asks for a materials-science paper figure, gra
   - `zh` for Simplified Chinese figure text
 - Insert the user's scientific content into the `Scientific Background` block.
 - Preserve the template constraints about causality, palette, typography, layout, and avoiding unsupported claims.
+- Prefer publication-style restraint over decorative AI rendering.
 - If exact numbers are not provided, use qualitative labels or placeholders instead of inventing values.
 
 ## Graphical Abstract

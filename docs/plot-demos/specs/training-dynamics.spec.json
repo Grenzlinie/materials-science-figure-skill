@@ -1,0 +1,183 @@
+{
+  "style": {
+    "font_size": 16,
+    "axes_linewidth": 2.5,
+    "use_tex": false,
+    "font_family": [
+      "DejaVu Sans",
+      "Helvetica",
+      "Arial",
+      "sans-serif"
+    ]
+  },
+  "layout": {
+    "nrows": 1,
+    "ncols": 3,
+    "figsize": [
+      14,
+      4.5
+    ],
+    "tight_layout_pad": 2.0
+  },
+  "panels": [
+    {
+      "type": "trend",
+      "title": "Training Accuracy",
+      "x": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "y_series": [
+        [
+          0.62,
+          0.7,
+          0.77,
+          0.82,
+          0.86,
+          0.89,
+          0.91,
+          0.93
+        ],
+        [
+          0.58,
+          0.64,
+          0.69,
+          0.74,
+          0.78,
+          0.81,
+          0.83,
+          0.85
+        ]
+      ],
+      "labels": [
+        "Ours",
+        "Baseline"
+      ],
+      "colors": [
+        "blue_main",
+        "red_strong"
+      ],
+      "xlabel": "Epoch",
+      "ylabel": "Accuracy",
+      "legend": true,
+      "legend_loc": "best",
+      "legend_ncol": 1,
+      "ylim": [
+        0.55,
+        0.96
+      ],
+      "grid": false,
+      "shadow": [
+        [
+          0.02,
+          0.018,
+          0.016,
+          0.014,
+          0.012,
+          0.01,
+          0.01,
+          0.009
+        ],
+        [
+          0.025,
+          0.022,
+          0.02,
+          0.018,
+          0.016,
+          0.014,
+          0.014,
+          0.012
+        ]
+      ]
+    },
+    {
+      "type": "trend",
+      "title": "Validation Accuracy",
+      "x": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "y_series": [
+        [
+          0.6,
+          0.67,
+          0.72,
+          0.77,
+          0.81,
+          0.84,
+          0.86,
+          0.88
+        ],
+        [
+          0.56,
+          0.61,
+          0.66,
+          0.7,
+          0.73,
+          0.76,
+          0.78,
+          0.79
+        ]
+      ],
+      "labels": [
+        "Ours",
+        "Baseline"
+      ],
+      "colors": [
+        "blue_main",
+        "red_strong"
+      ],
+      "xlabel": "Epoch",
+      "ylabel": "Accuracy",
+      "legend": true,
+      "legend_loc": "best",
+      "legend_ncol": 1,
+      "ylim": [
+        0.55,
+        0.92
+      ],
+      "grid": false,
+      "shadow": [
+        [
+          0.025,
+          0.022,
+          0.02,
+          0.018,
+          0.016,
+          0.015,
+          0.015,
+          0.014
+        ],
+        [
+          0.03,
+          0.028,
+          0.024,
+          0.022,
+          0.02,
+          0.018,
+          0.018,
+          0.016
+        ]
+      ]
+    },
+    {
+      "type": "legend",
+      "source_panel": 0,
+      "legend_loc": "center",
+      "legend_ncol": 1
+    }
+  ],
+  "suptitle": "Training Dynamics"
+}

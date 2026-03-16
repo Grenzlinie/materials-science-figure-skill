@@ -1,0 +1,101 @@
+{
+  "style": {
+    "font_size": 16,
+    "axes_linewidth": 2.5,
+    "use_tex": false,
+    "font_family": [
+      "DejaVu Sans",
+      "Helvetica",
+      "Arial",
+      "sans-serif"
+    ]
+  },
+  "layout": {
+    "nrows": 1,
+    "ncols": 2,
+    "figsize": [
+      12,
+      4.5
+    ],
+    "tight_layout_pad": 2.0
+  },
+  "panels": [
+    {
+      "type": "heatmap",
+      "title": "Optimization Heatmap",
+      "matrix": [
+        [
+          0.15,
+          0.28,
+          0.41,
+          0.46
+        ],
+        [
+          0.22,
+          0.39,
+          0.54,
+          0.63
+        ],
+        [
+          0.31,
+          0.48,
+          0.68,
+          0.79
+        ],
+        [
+          0.36,
+          0.55,
+          0.73,
+          0.84
+        ]
+      ],
+      "x_labels": [
+        "100C",
+        "150C",
+        "200C",
+        "250C"
+      ],
+      "y_labels": [
+        "2 h",
+        "4 h",
+        "6 h",
+        "8 h"
+      ],
+      "cmap": "magma",
+      "colorbar": true,
+      "colorbar_label": "Normalized Score",
+      "annotate": true,
+      "annotate_fmt": "{:.2f}",
+      "xtick_rotation": 45
+    },
+    {
+      "type": "scatter",
+      "title": "Bandgap vs Conductivity",
+      "x": [
+        1.05,
+        1.18,
+        1.32,
+        1.44,
+        1.57,
+        1.73
+      ],
+      "y": [
+        185,
+        214,
+        248,
+        279,
+        301,
+        336
+      ],
+      "color": "blue_main",
+      "xlabel": "Band Gap (eV)",
+      "ylabel": "Conductivity (S cm^-1)",
+      "size": 90,
+      "alpha": 0.85,
+      "legend": false,
+      "legend_loc": "best",
+      "grid": false
+    }
+  ],
+  "suptitle": "Property Mapping"
+}
