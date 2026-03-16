@@ -1,6 +1,8 @@
 ---
 name: nanobanana-image-generation
 description: Use when the user wants to generate or edit images with Google's Nanobanana/Gemini image models using the official Gemini API shape, or when they need publication-style scientific figures rendered exactly from data with the bundled Python plotting tool. Prefer this skill for text-to-image, image-to-image editing, multi-image reference workflows, attachment-based recreations, exact bar/trend/heatmap/scatter plots, or when the user wants publication-style figures such as materials-science paper schematics. Use it when the user asks for a materials-science figure, journal-style scientific illustration, graphical abstract, mechanism diagram, device architecture, processing workflow, or paper-ready materials figure.
+metadata: {"openclaw":{"requires":{"anyBins":["python3","python"],"env":["NANOBANANA_API_KEY","NANOBANANA_BASE_URL"]},"primaryEnv":"NANOBANANA_API_KEY","homepage":"https://docs.openclaw.ai/tools/skills"}}
+disable-model-invocation: true
 ---
 
 # Nanobanana Image Generation
