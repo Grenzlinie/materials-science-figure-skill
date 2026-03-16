@@ -40,10 +40,12 @@ function parseArgs(argv) {
 
   const parts = [...argv];
   if (parts.length === 0) {
-    throw new Error("Usage: node scripts/generate_image.js \"prompt\" [--input-image file.png]");
+    throw new Error("Usage: node scripts/generate_image.js [\"prompt\"] [--prompt-file file.md] [--input-image file.png]");
   }
 
-  args.prompt = parts.shift();
+  if (!parts[0].startsWith("--")) {
+    args.prompt = parts.shift();
+  }
   while (parts.length > 0) {
     const key = parts.shift();
     if (key === "--text-only") {

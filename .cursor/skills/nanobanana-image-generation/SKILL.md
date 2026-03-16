@@ -39,6 +39,13 @@ For requests like "replace the English text in this attached image with Chinese"
 
 ## Quick Start
 
+Preflight:
+
+- `plot` mode is local-only and does not require API credentials or outbound network access.
+- `image` mode sends prompt text, API credentials, and any `--input-image` files to the configured Gemini-compatible endpoint.
+- Prefer the official Google endpoint unless you intentionally trust another provider.
+- If you use a third-party endpoint, require `--allow-third-party` or `NANOBANANA_ALLOW_THIRD_PARTY=1` and treat that as an explicit trust decision.
+
 Set environment variables:
 
 ```bash
@@ -83,6 +90,7 @@ Safety note:
 - `scripts/build_materials_figure_prompt.py` and `--print-prompt` are local-only and do not send data over the network.
 - Actual prompt text, API keys, and user-provided input images are sent only when you run the generation scripts against the configured provider.
 - Non-official Gemini-compatible endpoints require explicit confirmation via `--allow-third-party` or `NANOBANANA_ALLOW_THIRD_PARTY=1`.
+- Prefer `NANOBANANA_API_KEY_FILE` over inline `--api-key` when you do not want the key to appear in shell history.
 
 ## Workflow
 
