@@ -1,7 +1,7 @@
 ---
 name: nanobanana-image-generation
 description: Use when the user wants to generate or edit images with Google's Nanobanana/Gemini image models using the official Gemini API shape, or when they need publication-style scientific figures rendered exactly from data with the bundled Python plotting tool. Prefer this skill for text-to-image, image-to-image editing, multi-image reference workflows, attachment-based recreations, exact bar/trend/heatmap/scatter plots, or when the user wants publication-style figures such as materials-science paper schematics. Use it when the user asks for a materials-science figure, journal-style scientific illustration, graphical abstract, mechanism diagram, device architecture, processing workflow, or paper-ready materials figure.
-metadata: {"openclaw":{"requires":{"anyBins":["python3","python"],"env":["NANOBANANA_API_KEY","NANOBANANA_BASE_URL"]},"primaryEnv":"NANOBANANA_API_KEY","homepage":"https://docs.openclaw.ai/tools/skills"}}
+metadata: {"openclaw":{"requires":{"anyBins":["python3","python"],"env":["NANOBANANA_API_KEY","NANOBANANA_BASE_URL"]},"primaryEnv":"NANOBANANA_API_KEY","homepage":"https://github.com/siyuliu/materials-science-figure-skill"}}
 disable-model-invocation: true
 ---
 
@@ -18,6 +18,11 @@ This skill now supports two modes:
 
 Use `image` mode for mechanism figures, graphical abstracts, device schematics, style-matched redraws, and diagram-first work.
 Use `plot` mode for exact bar charts, trend curves, heatmaps, scatter plots, and multi-panel figures that must preserve numeric truth.
+
+Runtime policy:
+
+- Python is the required runtime for this skill and the canonical path for both `image` and `plot` workflows.
+- `scripts/generate_image.js` is an optional parity CLI for environments that already use Node.js, not the required runtime baseline for registry gating.
 
 When the user is working in Codex and describes a plot in natural language, do not require them to hand-write a JSON spec. Codex should translate the request into an internal plot request or spec and run the plotting scripts.
 

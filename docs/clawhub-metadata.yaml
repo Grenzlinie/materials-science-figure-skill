@@ -1,5 +1,11 @@
 name: nanobanana-image-generation
-description: Generate or edit materials-science figures with Gemini-compatible image models using the official generateContent API shape.
+description: Generate or edit materials-science figures with Gemini-compatible image models using the official generateContent API shape, or render exact publication plots locally with Python.
+required_binaries:
+  - name: python3
+    description: Required runtime for the canonical image CLI and the local plotting pipeline.
+optional_binaries:
+  - name: node
+    description: Optional runtime for scripts/generate_image.js, which is a parity image CLI rather than the required baseline runtime.
 required_env:
   - name: NANOBANANA_API_KEY
     description: Provider API key used for authenticated generateContent requests.
@@ -14,10 +20,16 @@ optional_env:
     description: Path to a local file containing the provider API key instead of putting the key directly in an environment variable or CLI argument.
   - name: NANOBANANA_ALLOW_THIRD_PARTY
     description: Set to 1 only when intentionally sending API keys and user-provided files to a non-official Gemini-compatible provider.
+primary_credential:
+  env: NANOBANANA_API_KEY
+  alternatives:
+    - NANOBANANA_API_KEY_FILE
 capability_notes:
+  - Plot mode is local-only and does not require outbound network access or API credentials.
   - The skill only sends network requests when the generation CLIs are explicitly run.
   - build_materials_figure_prompt.py and --print-prompt are local-only and do not transmit prompts, files, or credentials.
-  - Non-official Gemini-compatible endpoints require explicit opt-in.
+  - scripts/generate_image.js is an optional alternate CLI; Python remains the required runtime baseline.
 security_notes:
-  - Prompts, API keys, and user-provided input images are sent only to the explicitly configured provider endpoint.
+  - Prompts, API keys, and user-provided input images are sent only to the explicitly configured provider endpoint when image mode is used.
   - Third-party provider use is blocked unless the user passes --allow-third-party or sets NANOBANANA_ALLOW_THIRD_PARTY=1.
+  - Prefer NANOBANANA_API_KEY_FILE over inline --api-key when avoiding shell-history leakage matters.

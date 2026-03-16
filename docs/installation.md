@@ -94,3 +94,18 @@ Provider note:
 ## Canonical Source
 
 If you need to update the skill, treat `skills/nanobanana-image-generation/` as the canonical source in this repository and then sync mirrored copies to the platform folders.
+
+## Registry Metadata
+
+ClawHub/OpenClaw publishing metadata for this skill lives in:
+
+```text
+docs/clawhub-metadata.yaml
+```
+
+Notes:
+
+- Python is the required runtime baseline for the published skill.
+- `node` is optional and only used for the alternate `scripts/generate_image.js` parity CLI.
+- Required env vars are `NANOBANANA_API_KEY` and `NANOBANANA_BASE_URL`.
+- Optional env vars are documented in `docs/clawhub-metadata.yaml` and in the skill's `SKILL.md`.
