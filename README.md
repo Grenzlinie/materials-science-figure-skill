@@ -9,12 +9,7 @@ This repository is packaged as a skill distribution repo, not just a script repo
 本仓库以技能分发仓库的形式打包，而不仅仅是脚本仓库。它包含可直接投放的多个智能体生态系统的技能文件夹，以便其他智能体能够以最小设置进行集成。
 
 ## One-Command Install
-(Recommened) Use skill.sh CLI and select which coding agent you want to install the skill.
-```bash
-npx skills add https://github.com/Grenzlinie/materials-science-figure-skill --skill nanobanana-image-generation
-```
-
-Recommended: use `npx skills add` to install `nanobanana-image-generation` directly from this repository.
+(Recommended) Use the `skill.sh` CLI to install `nanobanana-image-generation` directly from this repository.
 
 ```bash
 npx skills add https://github.com/Grenzlinie/materials-science-figure-skill --skill nanobanana-image-generation
